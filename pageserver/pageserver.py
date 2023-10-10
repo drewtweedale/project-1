@@ -91,8 +91,19 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-        transmit(STATUS_OK, sock)
-        transmit(CAT, sock)
+        print(parts)
+        for i in parts:
+            for j,k in enumerate(i):
+                if k == '~':
+                    transmit(STATUS_FORBIDDEN, sock)
+                if k == '.':
+                    if (j+1) > len(i):
+                        break
+                    elif (i[j+1]) == '.':
+                       transmit(STATUS_FORBIDDEN, sock) 
+        else:
+            transmit(STATUS_OK, sock)
+            transmit(CAT, sock)
     else:
         log.info("Unhandled request: {}".format(request))
         transmit(STATUS_NOT_IMPLEMENTED, sock)
